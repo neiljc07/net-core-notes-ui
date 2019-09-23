@@ -1,7 +1,5 @@
 <template>
   <v-app>
-    <v-btn @click="logout" v-if="hide">Logout</v-btn>
-
     <router-view></router-view>
   </v-app>
 </template>

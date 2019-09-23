@@ -68,25 +68,35 @@
       displayName: '',
       displayNameRules: [
         v => !! v || 'Display Name is required',
+        v => (v && v.length <= 30) || 'Display Name must not be greater than 30 characters',
+        v => (v && v.length >= 6) || 'Display Name must be greater than or equal to 6 characters',
       ],
       
       username: '',
       usernameRules: [
         v => !! v || 'Username is required',
+        v => (v && v.length <= 20) || 'Username must not be greater than 20 characters',
+        v => (v && v.length >= 6) || 'Username must be greater than or equal to 6 characters',
+        v => /^[a-zA-Z0-9_]+$/.test(v) || 'Username must not contain special characters'
       ],
       
       password: '',
       passwordRules: [
         v => !!v || 'Password is required',
+        v => (v && v.length <= 30) || 'Password must not be greater than 30 characters',
+        v => (v && v.length >= 6) || 'Password must be greater than or equal to 6 characters',
       ],
 
       confirmPassword: '',
-      confirmPasswordRules: [
-        v => !!v || 'Confirm Password is required',
-      ],
-
-
     }),
+
+    computed: {
+      confirmPasswordRules() {
+        return [
+          () => (this.confirmPassword === this.password) || 'Password must match'
+        ];
+      }
+    },
 
     methods: {
       submit () {
@@ -96,19 +106,22 @@
           axios
             .post(CONSTANTS.API_URL + '/user', 
               { 
+                displayName : vm.displayName,
                 username : vm.username, 
                 password: vm.password 
               })
             .then(response => {
               vm.message = "Registration Success";
-              // localStorage.setItem('user', JSON.stringify(response.data));
-              // router.push('/');
+              localStorage.setItem('user', JSON.stringify(response.data));
+              router.push('/');
             })
             .catch(error => {
+              vm.message = "";
+
               if(error.response) {
                 if(error.response.data.code == '00009') {
                   error.response.data.errors.forEach((item) => {
-                    vm.message += item.message[0].errorMessage + '\r\n';
+                    vm.message += item.message[0].errorMessage + '<br>';
                   });
                 } else {
                   vm.message = error.response.data.message;
