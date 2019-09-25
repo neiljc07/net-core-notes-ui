@@ -1,5 +1,9 @@
 # net-core-notes-ui
 
+## API Backend Setup
+run or publish https://github.com/neiljc07/net-core-notes-api
+update the url value of API_URL in src/config.js
+
 ## Project setup
 ```
 npm install
