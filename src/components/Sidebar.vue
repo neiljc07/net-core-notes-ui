@@ -11,9 +11,6 @@
           :key="i"
           @click="goTo(item.path)"
         >
-          <v-list-item-icon>
-            <v-icon v-text="item.icon"></v-icon>
-          </v-list-item-icon>
           <v-list-item-content>
             <v-list-item-title v-text="item.text"></v-list-item-title>
           </v-list-item-content>
@@ -28,9 +25,9 @@ export default {
   data: () => ({
     item: 0,
     items: [
-      { text: 'Notes', icon: 'mdi-clock', path : '/' },
-      { text: 'Profile', icon: 'mdi-account', path : '/profile' },
-      { text: 'Logout', icon: 'mdi-flag', path : '/logout' },
+      { text: 'Notes', path : '/' },
+      { text: 'Profile', path : '/profile' },
+      { text: 'Logout', path : '/logout' },
     ],
   }),
 

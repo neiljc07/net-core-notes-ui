@@ -1,68 +1,57 @@
 <template>
-  <v-container fluid>
-    <v-row
-      class="mb-6"
-      no-gutters
-    >
-      <v-col cols="2">
-        <Sidebar />
-      </v-col>
+  <v-row>
+    <v-col cols="12" class="pr-3 pl-3 pt-0">
+      <v-row no-gutters>
+        <v-col 
+          :lg="3"
+          :md="3"
+          :sm="6"
+          :xs="12"
+          v-for="item in notes"
+          class="pr-2 pl-2 pb-4">
+            <v-card
+              class="mx-auto"
+            >
+              <v-card-text>
+                <v-form
+                  ref="form">
+                  <v-textarea
+                    v-model="item.note"
+                    auto-grow
+                    label="Note"
+                    rows="3"
+                  ></v-textarea>
+                </v-form>
+              </v-card-text>
 
-      <v-col cols="10" class="pr-3 pl-3">
+              <v-card-actions>
+                <v-spacer></v-spacer>
+                <v-btn 
+                  dark 
+                  small
+                  @click="submit(item)">Save</v-btn>
 
-        <v-row no-gutters>
-          <v-col 
-            :lg="3"
-            :md="3"
-            :sm="6"
-            :xs="12"
-            v-for="item in notes"
-            class="pr-2 pl-2 pb-4">
-              <v-card
-                class="mx-auto"
-              >
-                <v-card-text>
-                  <v-form
-                    ref="form">
-                    <v-textarea
-                      v-model="item.note"
-                      auto-grow
-                      label="Note"
-                      rows="3"
-                    ></v-textarea>
-                  </v-form>
-                </v-card-text>
+                <v-btn 
+                  small
+                  dark
+                  color="red"
+                  @click="confirmDelete(item)">Delete</v-btn>
+              </v-card-actions>
+            </v-card>
+        </v-col>
+      </v-row>
 
-                <v-card-actions>
-                  <v-spacer></v-spacer>
-                  <v-btn 
-                    dark 
-                    small
-                    @click="submit(item)">Save</v-btn>
-
-                  <v-btn 
-                    small
-                    dark
-                    color="red"
-                    @click="confirmDelete(item)">Delete</v-btn>
-                </v-card-actions>
-              </v-card>
-          </v-col>
-        </v-row>
-
-        <v-btn
-          dark
-          bottom
-          right
-          fab
-          fixed
-          @click="addNote"
-        >
-          <v-icon>mdi-plus</v-icon>
-        </v-btn>
-      </v-col>
-    </v-row>
-
+      <v-btn
+        dark
+        bottom
+        right
+        fab
+        fixed
+        @click="addNote"
+      >
+        <v-icon>mdi-plus</v-icon>
+      </v-btn>
+    </v-col>
 
     <v-dialog
       v-model="dialog"
@@ -90,9 +79,7 @@
         </v-card-actions>
       </v-card>
     </v-dialog>
-
-    
-  </v-container>
+  </v-row>
 </template>
 
 <script>
@@ -110,7 +97,7 @@ export default {
     noteToBeRemoved : null
   }),
 
-  mounted: function () {
+  beforeMount: function () {
     const self = this;
 
     axios

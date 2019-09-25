@@ -1,17 +1,18 @@
 <template>
   <v-layout align-center justify-center>
     <v-flex xs12 sm8 md4>
-      <v-card>
-        <v-toolbar dark>
-          <v-toolbar-title>Registration Form</v-toolbar-title>
-        </v-toolbar>
-        <v-card-text>
-          <p v-html="message"></p>
-          <v-form
-            ref="form"
-            v-model="valid"
-            lazy-validation>
+      <v-form
+        ref="form"
+        v-model="valid"
+        lazy-validation>
 
+        <v-card>
+          <v-toolbar dark>
+            <v-toolbar-title>Registration Form</v-toolbar-title>
+          </v-toolbar>
+          <v-card-text>
+            <p class="text-center" v-html="message"></p>
+            
             <v-text-field
               v-model="displayName"
               label="Display Name"
@@ -42,14 +43,14 @@
               required
             ></v-text-field>
 
-          </v-form>
-        </v-card-text>
-        <v-card-actions>
-          <v-spacer></v-spacer>
-          <v-btn dark @click="submit">Register</v-btn>
-          <v-btn dark to="/login">Back to Login</v-btn>
-        </v-card-actions>
-      </v-card>
+          </v-card-text>
+          <v-card-actions>
+            <v-spacer></v-spacer>
+            <v-btn dark @click="submit">Register</v-btn>
+            <v-btn to="/login">Back to Login</v-btn>
+          </v-card-actions>
+        </v-card>
+      </v-form>
     </v-flex>
   </v-layout>
 </template>
@@ -121,10 +122,10 @@
               if(error.response) {
                 if(error.response.data.code == '00009') {
                   error.response.data.errors.forEach((item) => {
-                    vm.message += item.message[0].errorMessage + '<br>';
+                    vm.message += "<span class='red--text'>" + item.message[0].errorMessage + "</span><br>";
                   });
                 } else {
-                  vm.message = error.response.data.message;
+                  vm.message = "<span class='red--text'>" + error.response.data.message + "</span>";
                 }
               }
             })

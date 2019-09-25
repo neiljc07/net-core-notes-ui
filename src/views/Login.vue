@@ -6,7 +6,7 @@
           <v-toolbar-title>Login Form</v-toolbar-title>
         </v-toolbar>
         <v-card-text>
-          <p>{{ message }}</p>
+          <p class="text-center" v-html="message"></p>
           <v-form
             ref="form"
             v-model="valid"
@@ -29,7 +29,7 @@
         <v-card-actions>
           <v-spacer></v-spacer>
           <v-btn dark @click="submit">Login</v-btn>
-          <v-btn dark to="/register">Register</v-btn>
+          <v-btn to="/register">Register</v-btn>
         </v-card-actions>
       </v-card>
     </v-flex>
@@ -68,13 +68,12 @@
                 password: vm.password 
               })
             .then(response => {
-              vm.message = "Login Success";
               localStorage.setItem('user', JSON.stringify(response.data));
               router.push('/');
             })
             .catch(error => {
               if(error.response) {
-                vm.message = error.response.data.message;
+                vm.message = "<span class='red--text'>" + error.response.data.message + "</span>";
               }
             })
         }

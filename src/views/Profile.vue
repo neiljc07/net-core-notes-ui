@@ -6,7 +6,7 @@
           <v-toolbar-title>Edit Profile</v-toolbar-title>
         </v-toolbar>
         <v-card-text>
-          <p v-html="message"></p>
+          <p class="text-center" v-html="message"></p>
           <v-form
             ref="form"
             v-model="valid"
@@ -15,15 +15,13 @@
             <v-text-field
               v-model="displayName"
               label="Display Name"
-              :rules="displayNameRules"
-              required
+              disabled
             ></v-text-field>
 
             <v-text-field
               v-model="username"
               label="Username"
-              :rules="usernameRules"
-              required
+              disabled
             ></v-text-field>
 
             <v-text-field
@@ -46,8 +44,7 @@
         </v-card-text>
         <v-card-actions>
           <v-spacer></v-spacer>
-          <v-btn dark @click="submit">Register</v-btn>
-          <v-btn dark to="/login">Back to Login</v-btn>
+          <v-btn dark @click="submit">Save</v-btn>
         </v-card-actions>
       </v-card>
     </v-flex>
@@ -66,19 +63,7 @@
       valid: true,
 
       displayName: '',
-      displayNameRules: [
-        v => !! v || 'Display Name is required',
-        v => (v && v.length <= 30) || 'Display Name must not be greater than 30 characters',
-        v => (v && v.length >= 6) || 'Display Name must be greater than or equal to 6 characters',
-      ],
-      
       username: '',
-      usernameRules: [
-        v => !! v || 'Username is required',
-        v => (v && v.length <= 20) || 'Username must not be greater than 20 characters',
-        v => (v && v.length >= 6) || 'Username must be greater than or equal to 6 characters',
-        v => /^[a-zA-Z0-9_]+$/.test(v) || 'Username must not contain special characters'
-      ],
       
       password: '',
       passwordRules: [
@@ -89,6 +74,11 @@
 
       confirmPassword: '',
     }),
+
+    mounted: function() {
+      this.displayName = JSON.parse(localStorage.getItem('user')).displayName;
+      this.username = JSON.parse(localStorage.getItem('user')).username;
+    },
 
     computed: {
       confirmPasswordRules() {
@@ -101,19 +91,22 @@
     methods: {
       submit () {
         const vm = this;
+        const user = JSON.parse(localStorage.getItem('user'));
 
         if (this.$refs.form.validate()) {
           axios
-            .post(CONSTANTS.API_URL + '/user', 
+            .put(CONSTANTS.API_URL + '/user/UpdatePassword/' + user.id, 
               { 
-                displayName : vm.displayName,
-                username : vm.username, 
+                id : user.id,
                 password: vm.password 
+              },
+              { 
+                headers: {
+                  Authorization: 'Bearer ' + user.token
+                }
               })
             .then(response => {
-              vm.message = "Registration Success";
-              localStorage.setItem('user', JSON.stringify(response.data));
-              router.push('/');
+              vm.message = "<span class='green--text'>Password Update Success</span>";
             })
             .catch(error => {
               vm.message = "";
